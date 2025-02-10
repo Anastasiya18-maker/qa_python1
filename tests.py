@@ -41,7 +41,8 @@ class TestBooksCollector:
         collector.add_new_book('Властелин колец')
         collector.set_book_genre('Властелин колец', 'Неизвестный жанр')  # Жанр не существует
 
-        assert collector.get_book_genre('Властелин колец') == ''
+        assert collector.get_book_genre('Властелин колец') == '' # Проверка метода get_book_genre!
+        assert len(collector.get_list_of_favorites_books()) == 0 # Проверка метода get_list_of_favorites_books!
 
     def test_get_books_with_specific_genre(self):
         collector = BooksCollector()
@@ -82,11 +83,25 @@ class TestBooksCollector:
         collector.delete_book_from_favorites('Преступление и наказание')
         assert len(collector.get_list_of_favorites_books()) == 0
 
-    @pytest.mark.parametrize("book_name, expected_length", [
-        ('Краткая история времени', 1),
-        ('Сумерки', 2),
+    @pytest.mark.parametrize("book_name, additional_book, expected_length", [
+        ('Краткая история времени', 'Новая книга', 2),
+        ('Сумерки', 'Пандемониум', 2),
     ])
-    def test_add_and_search_multiple_books(self, book_name, expected_length):
+    def test_add_and_search_multiple_books(self, book_name, additional_book, expected_length):
+        collector = BooksCollector()
+
+        # Добавление первой книги
+        collector.add_new_book(book_name)
+        collector.set_book_genre(book_name, 'Фантастика')
+
+        # Добавление дополнительной книги
+        collector.add_new_book(additional_book)
+        collector.set_book_genre(additional_book, 'Комедия')
+
+        # Проверка количества книг
+        assert len(collector.get_books_genre()) == expected_length
+
+def test_add_and_search_multiple_books(self, book_name, expected_length):
         collector = BooksCollector()
         collector.add_new_book(book_name)
         collector.set_book_genre(book_name, 'Фантастика')
